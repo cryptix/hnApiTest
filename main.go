@@ -48,15 +48,21 @@ func main() {
 
 		fmt.Println(search.NbHits, "for user:", username)
 		for _, hit := range search.Hits {
-			// fmt.Printf("%# v\n", pretty.Formatter(hit))
-			pretty.Println(hit)
-			// i := new(Item)
-			// _, err = api.Res("items", i).Id(hit.ObjectID).Get()
-			// if err != nil {
-			// 	fmt.Println(err)
-			// 	continue
-			// }
-			// fmt.Println(i.Title)
+			if hit.ObjectID == "" {
+				continue
+			}
+
+			i := new(Item)
+			_, err = api.Res("items", i).Id(hit.ObjectID).Get()
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+			if i.Type != "story" {
+				continue
+			}
+			pretty.Println(i)
+
 		}
 	}
 }
